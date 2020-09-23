@@ -234,6 +234,10 @@ int fitsBits(int x, int n) {
  *   Rating: 2
  */
 int divpwr2(int x, int n) {
+/*
+ * for positive number or zero, it's just right shift
+ * for negative number, round up
+ */
 	return 0;
 }
 /* 
@@ -264,7 +268,14 @@ int isPositive(int x) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-	return 0;
+/*
+ * if x <= y then x - y - 1 < 0
+ * condition is: either x < 0 && y >= 0 or not (x >= 0 && y < 0) && x - y - 1 < 0
+ */
+	int sgnx = (x >> 31) & 1;
+	int sgny = (y >> 31) & 1;
+	int res = !!((x + ~y) >> 31);
+	return (sgnx & !sgny) | (!(!sgnx & sgny) & res);
 }
 /*
  * ilog2 - return floor(log base 2 of x), where x > 0
@@ -274,7 +285,22 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4
  */
 int ilog2(int x) {
-	return 0;
+/*
+ * the idea is to find the 1 appearing in the most significant bit.
+ * we have to implement a binary search to do that, as we have no loop
+ * and there's no compare operator, so we can't compute something like mid
+ * in this case, we first look at the greater half  ****0000
+ * if there is at least one 1, we look at the greater half of this half again  **000000
+ * if not, we look at the greater half of the other half   0000**00
+ * esentially, ans tells the program which grater half to look next
+ */
+	int ans = 0;
+	ans = !!(x >> 16) << 4;
+	ans += !!(x >> (8 + ans)) << 3;
+	ans += !!(x >> (4 + ans)) << 2;
+	ans += !!(x >> (2 + ans)) << 1;
+	ans += !!(x >> (1 + ans));
+	return ans;
 }
 /* 
  * float_neg - Return bit-level equivalent of expression -f for
