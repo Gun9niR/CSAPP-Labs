@@ -143,7 +143,7 @@ NOTES:
  *   Rating: 1
  */
 int bitXor(int x, int y) {
-  return 2;
+ 	return ~(~(~x & y) & ~(x & ~y));
 }
 /* 
  * tmin - return minimum two's complement integer 
@@ -152,9 +152,7 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int tmin(void) {
-
-  return 2;
-
+ 	return 1 << 31;
 }
 //2
 /*
@@ -165,7 +163,7 @@ int tmin(void) {
  *   Rating: 1
  */
 int isTmax(int x) {
-  return 2;
+	return !((x + x) ^ (~1)) & !!(x ^ (~0)); 
 }
 /* 
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
@@ -176,17 +174,20 @@ int isTmax(int x) {
  *   Rating: 2
  */
 int allOddBits(int x) {
-  return 2;
+	int mask = 0xAA;
+	int mask1 = mask | (mask << 8);
+	int mask2 = mask1 | (mask1 << 16);
+	return !((x & mask2) ^ mask2);
 }
 /* 
  * negate - return -x 
- *   Example: negate(1) = -1.
+ *   Example: negate(1) = -1
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 5
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+  return ~x + 1;
 }
 //3
 /* 
@@ -199,8 +200,16 @@ int negate(int x) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  return 2;
+/*
+ * extract the second half byte and the first half byte
+ */
+	int mask = 15;
+	int second = (x >> 4) & mask;
+	int first = x & mask;
+	int isNeg = !!((first + ~9) >> 31);
+	return !(x >> 8) & !(second ^ 3) & isNeg;
 }
+
 /* 
  * conditional - same as x ? y : z 
  *   Example: conditional(2,4,5) = 4
@@ -209,7 +218,8 @@ int isAsciiDigit(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  return 2;
+	int mask = (!!x) << 31 >> 31;
+	return (y & mask) | (~mask & z);
 }
 /* 
  * isLessOrEqual - if x <= y  then return 1, else return 0 
@@ -219,7 +229,9 @@ int conditional(int x, int y, int z) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-  return 2;
+	int sgnx = (x >> 31) & 1;
+	int sgny = (y >> 31) & 1;
+	return (sgnx & !sgny) | (!(!sgnx & sgny) & ((x + ~y) >> 31));
 }
 //4
 /* 
@@ -231,7 +243,15 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4 
  */
 int logicalNeg(int x) {
-  return 2;
+/*
+ * check each bit by using or
+ */
+	x = x | (x >> 16);
+	x = x | (x >> 8);
+	x = x | (x >> 4);
+	x = x | (x >> 2);
+	x = x | (x >> 1);
+	return 1 ^ (x & 1);
 }
 /* howManyBits - return the minimum number of bits required to represent x in
  *             two's complement
@@ -246,7 +266,21 @@ int logicalNeg(int x) {
  *  Rating: 4
  */
 int howManyBits(int x) {
-  return 0;
+/*
+ * for positive, look for the first 1
+ * for negative, ~ it so that we can also look for the first 1
+ * could use binary search
+ * ans only computes the offset for the first 1, so return ans + 2, which is sign bit + the '1' bit. 0 contains no 1, so make it a corner case
+ */
+	int mask = x >> 31;
+	int ans = 0;
+	x = (mask & ~x) | (~mask & x);
+	ans += !!(x >> 16) << 4;
+	ans += !!(x >> (8 + ans)) << 3;
+	ans += !!(x >> (4 + ans)) << 2;
+	ans += !!(x >> (2 + ans)) << 1;
+	ans += !!(x >> (1 + ans));
+	return (!x & 1) | ((!!x << 31 >> 31) & (ans + 2));
 }
 //float
 /* 
@@ -261,7 +295,26 @@ int howManyBits(int x) {
  *   Rating: 4
  */
 unsigned floatScale2(unsigned uf) {
-  return 2;
+/*
+ * three scenarios:
+ * 1. Nan or inf 
+ *    return uf
+ * 2. demoralized
+ *    left shift the number, except for the sign bit
+ * 3. normalized
+ *    add 1 to exp field
+ */
+	unsigned inf = 0xff;
+	unsigned exp = (uf >> 23) & inf;
+	unsigned mask = 0x80000000;
+	unsigned sgn;
+	if(exp == inf) {
+		return uf;
+	} else if(exp == 0) {
+		sgn = uf & mask;
+		return (uf << 1) | sgn;
+	}
+	return uf + (1 << 23);
 }
 /* 
  * floatFloat2Int - Return bit-level equivalent of expression (int) f
@@ -276,7 +329,49 @@ unsigned floatScale2(unsigned uf) {
  *   Rating: 4
  */
 int floatFloat2Int(unsigned uf) {
-  return 2;
+/*
+ * 1. Nan or inf
+ *    return 0x80000000u
+ * 2. denormalized
+ *    return 0x80000000u
+ * 3. normalized
+ *    if exp < 127, the result must be a fraction, return 0
+ *    substract 127 from exp
+ *    extract exp
+ *    extract frac
+ *    preserve sign bit
+ *    30 bits left for frac
+ *    so if exp > 30, return 0x80000000u
+ *    if exp >= 23, left shift (exp - 23)
+ *    if exp < 23, right shift (23 - exp) and just let it underflow
+ *    corner case: 0 and 0x80000000 as float all evaluate to 0
+ */
+	unsigned inf = 0xff;
+	unsigned sgn = uf & 0x80000000;
+	unsigned exp = (uf >> 23) & inf;
+	unsigned frac = uf & ((1 << 23) - 1);
+	int res = 0;
+	if(uf == 0 || uf == 0x80000000 || exp < 127) {
+		return 0;
+	}
+	if(exp == inf || exp == 0) {
+		return 0x80000000u;
+	}
+	exp = exp - 127;
+	if(exp > 30) {
+		return 0x80000000u;
+	}
+	if(exp >= 23) {
+		res = res << (exp - 23);
+	} else {
+		frac += (1 << 23);
+		res = frac >> (23 - exp);
+	}
+	if(sgn) {
+		return -res; 
+	} else {
+		return res;
+	}
 }
 /* 
  * floatPower2 - Return bit-level equivalent of the expression 2.0^x
@@ -292,5 +387,20 @@ int floatFloat2Int(unsigned uf) {
  *   Rating: 4
  */
 unsigned floatPower2(int x) {
-    return 2;
+/*
+ * x < -149 : too small (-149 = 1 - 127 - 23)
+ * x > 127 : too large  
+ * x < -126 : denormalized -127 can be represented, but -126 can't, as fraction < 0
+ * others : normalized
+ */
+	if (x > 127) {
+		return 0x7f800000;
+	}
+	if (x < -149) {
+		return 0;
+	}
+	if (x < -126) {
+		return (1 << 23) >> (-x - 126);
+	}
+    return (x + 127) << 23;
 }
