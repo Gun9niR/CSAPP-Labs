@@ -23,9 +23,9 @@ Correctness Points| Results Rating| Errors | Perf Results Points | Ops Used |Puz
 3|3|0|2|8/16|`conditional`
 3|3|0|2|14/24|`isLessOrEqual`
 4|4|0|2|12/12|`logicalNeg`
-<font color=red>4</font>|<font color=red>4</font>|<font color=red>0</font>|<font color=red>2</font>|<font color=red>43/90</font>|`howManyBits`
+*4*|*4*|*0*|*2*|*43/90*|`*howManyBits*`
 4|4|0|2|9|`floatScale2`
-<font color=red>4</font>|<font color=red>4</font>|<font color=red>0</font>|<font color=red>2</font>|<font color=red>24</font>|`floatFloat2Int`
+*4*|*4*|*0*|*2*|*24*|`*floatFloat2Int*`
 0|4|1|0|11|`floatPower2`
 
 
@@ -33,4 +33,4 @@ Correctness Points| Results Rating| Errors | Perf Results Points | Ops Used |Puz
 
 ### Note:
 - I'm pretty sure something's wrong with the test sequence for `floatPower2`, causing the TLE. I compiled it with gcc and it worked fine.
-- Lines colored red indicate that I wasn't able to solve the puzzle independently.
+- Lines with *italic* indicate that I wasn't able to solve the puzzle independently.
