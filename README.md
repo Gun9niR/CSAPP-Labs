@@ -6,10 +6,10 @@ The original files were cloned from https://github.com/Exely/CSAPP-Labs, since I
 
 
 # To-do List
-- [] Data Lab
-- [] Bomb Lab
-- [] Attack LAb
-- [] Cache Lab
-- [] Shell Lab
-- [] Malloc Lab
-- [] Proxy Lab
+- [ ] Data Lab
+- [ ] Bomb Lab
+- [ ] Attack LAb
+- [ ] Cache Lab
+- [ ] Shell Lab
+- [ ] Malloc Lab
+- [ ] Proxy Lab
