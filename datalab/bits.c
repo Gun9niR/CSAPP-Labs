@@ -236,9 +236,10 @@ int fitsBits(int x, int n) {
 int divpwr2(int x, int n) {
 /*
  * for positive number or zero, it's just right shift
- * for negative number, round up
+ * for negative number, if we have to round up, just create a mask which is either 1 or 0 and add it to res
  */
-	return 0;
+	int mask = !!((x >> 31) & (x & (1 << n) + ~0));
+	return (x >> n) + mask;
 }
 /* 
  * negate - return -x 
