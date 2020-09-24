@@ -23,13 +23,13 @@ Correctness Points| Results Rating| Errors | Perf Results Points | Ops Used |Puz
 3|3|0|2|8/16|`conditional`
 3|3|0|2|14/24|`isLessOrEqual`
 4|4|0|2|12/12|`logicalNeg`
-*4*|*4*|*0*|*2*|*43/90*|`*howManyBits*`
+*4*|*4*|*0*|*2*|*43/90*|`howManyBits`
 4|4|0|2|9|`floatScale2`
-*4*|*4*|*0*|*2*|*24*|`*floatFloat2Int*`
+*4*|*4*|*0*|*2*|*24*|`floatFloat2Int`
 0|4|1|0|11|`floatPower2`
 
 
-<font size=4>Score = `56/62` [ `32/36` Corr + `24/26` Perf ] &emsp;  (162 total operators)</font>
+<font size=5>Score = `56/62` [ `32/36` Corr + `24/26` Perf ] &emsp;  (162 total operators)</font>
 
 ### Note:
 - I'm pretty sure something's wrong with the test sequence for `floatPower2`, causing the TLE. I compiled it with gcc and it worked fine.
