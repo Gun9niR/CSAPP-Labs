@@ -3,7 +3,7 @@ Just the labs. Some of my explanations for the code are in the comment.
 
 # To-do List
 - [x] Data Lab
-- [ ] Bomb Lab
+- [x] Bomb Lab
 - [ ] Attack LAb
 - [ ] Cache Lab
 - [ ] Shell Lab
@@ -34,3 +34,6 @@ Correctness Points| Results Rating| Errors | Perf Results Points | Ops Used |Puz
 ### Note:
 - I'm pretty sure something's wrong with the test sequence for `floatPower2`, causing the TLE. I compiled it with gcc and it worked fine.
 - Lines with *italic* indicate that I wasn't able to solve the puzzle independently.
+
+## Bomb Lab (10/17/2020)
+Six phases & secret phase completed. No explosions. My solution is in `/bomblab/crack.txt` and the explanation for each phase is in `/bomblab/explanation`.
