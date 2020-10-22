@@ -18,7 +18,7 @@ Raw string:
 \BF\FA\97\B9Yh\EC@\00\C3\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00x\DCaU
 
 What I did with the string:
-The injected code is stored in (%rsp) (before deallocation), so we just need to return to (%rsp) (before deallocation) after executing the body of getbuf(). That means, starting at the 41st byte, the bytes should be the address of %rsp, which is %5561dc78. Then, starting at the 1st byte, we need to store the injected machine code. The assembly code is stored in level2.s and the disassembled version is in level2.d. I have left a comment for each line of code in level2.s.
+The injected code is stored in (%rsp) (before deallocation), so we just need to return to (%rsp) (before deallocation) after executing the body of getbuf(). That means, starting at the 41st byte, the bytes should be the value of %rsp, which is %5561dc78. Then, starting at the 1st byte, we need to store the injected machine code. The assembly code is stored in level2.s and the disassembled version is in level2.d. I have left a comment for each line of code in level2.s.
 
 
 Level 3
@@ -29,4 +29,5 @@ Raw string:
 H\C7Ǩ\DCaUh\FA@\00\C3\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00x\DCaU\00\00\00\0059b997fa
 
 What I did with the string:
-The injected code can still be stored at (%rsp), but the string cannot be stored in the stack frame for getbuf(). Because when switching control to injected code, the stack frame for getbuf() is already deallocated. The touch3(), hex(), and injected code will push the stack 5 times in total, completely overriding the original stack frame. Therefore, we can put the string at 0x8(%rsp). Note that the string(cookie) should be given in hex representation.
+The injected code can still be stored at (%rsp) (before deallocation), but the string cannot be stored in the stack frame for getbuf(). Because when switching control to injected code, the stack frame for getbuf() is already deallocated. The touch3(), hex(), and injected code will push the stack 5 times in total, completely overwriting the original stack frame. Therefore, we can put the string at 0x8(%rsp). 
+Note that the string (cookie) should be given in hex representation.
