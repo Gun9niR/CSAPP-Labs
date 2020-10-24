@@ -4,7 +4,7 @@ Just the labs. Some of my explanations for the code are in the comment.
 # To-do List
 - [x] Data Lab
 - [x] Bomb Lab
-- [ ] Attack LAb
+- [x] Attack LAb
 - [ ] Cache Lab
 - [ ] Shell Lab
 - [ ] Malloc Lab
@@ -37,3 +37,6 @@ Correctness Points| Results Rating| Errors | Perf Results Points | Ops Used |Puz
 
 ## Bomb Lab (10/17/2020)
 Six phases & secret phase completed. No explosions. My solution is in `/bomblab/crack.txt` and the explanation for each phase is in `/bomblab/explanation`.
+
+## Attack Lab (10/24/2020)
+5 levels completed. My solution is in `/attacklab/solution`.
