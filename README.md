@@ -4,7 +4,7 @@ Just the labs. Some of my explanations for the code are in the comment.
 # To-do List
 - [x] Data Lab
 - [x] Bomb Lab
-- [x] Attack LAb
+- [x] Attack Lab
 - [ ] Cache Lab
 - [ ] Shell Lab
 - [ ] Malloc Lab
