@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <errno.h>
+
 #define MAX_INSLEN  512
 
 typedef unsigned char byte_t;

@@ -321,12 +321,17 @@ parse_t parse_digit(char **ptr, long *value)
         return PARSE_ERR;
     }
 
-    char *start = *ptr;
-
-    *value = strtoll(start, ptr, 0);
-    if (errno == ERANGE) {
-        *value = strtoull(start, ptr, 0);
+    
+    int sgn = 1;
+    if (**ptr == '-') {
+        sgn = -1;
+        ++(*ptr);
     }
+
+    char *start = *ptr;
+    *value = sgn * strtoull(start, ptr, 0);
+    
+
     return PARSE_DIGIT;
 }
 
