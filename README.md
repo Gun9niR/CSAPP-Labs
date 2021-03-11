@@ -8,6 +8,7 @@ Just the labs. Some of my explanations for the code are in the comment.
 - [x] Bomb Lab
 - [x] Attack Lab
 - [x] Y86 Simulator
+- [x] Y86 Assembler
 - [ ] Cache Lab
 - [ ] Shell Lab
 - [ ] Malloc Lab
@@ -55,3 +56,13 @@ Score for instructions: 33/33
 Score for applications: 40/40
 
 Total score:            73/73
+
+## Y86 Assembler (03/11/2021)
+
+Score for instructions: 33/33
+
+Score for error-handling cases: 8/8
+
+Score for applications: 40/40
+
+Total score:            81/81
